@@ -1,0 +1,395 @@
+:root {
+  --primary: #035C65;
+  --dark-bg: #02060E;
+  --card-bg: rgba(2, 6, 14, 0.65);
+  --border-color: rgba(255, 255, 255, 0.07);
+  --text-main: #FFFFFF;
+  --text-muted: #94A3B8;
+  --glow-color: rgba(3, 92, 101, 0.25);
+  
+  /* Status Colors */
+  --status-online: #23A55A;
+  --status-idle: #F0B232;
+  --status-dnd: #F23F43;
+  --status-offline: #80848E;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  user-select: none;
+}
+
+body {
+  background-color: var(--dark-bg);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-main);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ==================================================
+   1. BACKGROUND BASE & BLURRED ATMOSPHERE
+   ================================================== */
+.background-blur {
+  position: fixed;
+  inset: -50px;
+  background: 
+    radial-gradient(circle at 50% 20%, rgba(3, 92, 101, 0.22), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(3, 43, 82, 0.3), transparent 50%),
+    linear-gradient(180deg, #035C65 0%, #032B52 35%, #02060E 100%);
+  filter: blur(35px);
+  transform: scale(1.08);
+  z-index: 0;
+  transition: opacity 1s ease;
+}
+
+/* ==================================================
+   2. ATMOSPHERIC FOG SYSTEM
+   ================================================== */
+.fog-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.25;
+}
+
+.fog-1 {
+  background: radial-gradient(ellipse at center, rgba(3, 92, 101, 0.15) 0%, transparent 70%);
+  animation: fogFloat1 30s ease-in-out infinite alternate;
+}
+
+.fog-2 {
+  background: radial-gradient(ellipse at 30% 70%, rgba(2, 6, 14, 0.4) 0%, transparent 60%);
+  animation: fogFloat2 40s ease-in-out infinite alternate;
+}
+
+@keyframes fogFloat1 {
+  0% { transform: translate(-10px, -10px) scale(1); }
+  100% { transform: translate(15px, 15px) scale(1.05); }
+}
+
+@keyframes fogFloat2 {
+  0% { transform: translate(10px, 5px) scale(1.05); }
+  100% { transform: translate(-15px, -10px) scale(1); }
+}
+
+/* ==================================================
+   3. FULLSCREEN CANVAS (RAIN & DROPLETS)
+   ================================================== */
+#rainCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ==================================================
+   4. CURSOR INTERACTIVE GLOW
+   ================================================== */
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background: radial-gradient(
+    500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(3, 92, 101, 0.18),
+    transparent 80%
+  );
+  z-index: 3;
+  transition: background 0.1s ease-out;
+}
+
+/* ==================================================
+   5. ENTER SCREEN
+   ================================================== */
+.enter-screen {
+  position: fixed;
+  inset: 0;
+  background-color: var(--dark-bg);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.enter-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.enter-content {
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.spin-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--primary);
+  animation: spin 4s linear infinite;
+}
+
+.enter-content p {
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* ==================================================
+   6. PROFILE CARD (GLASSMORPHISM)
+   ================================================== */
+.main-container {
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 35px 25px 25px 25px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 35px var(--glow-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease, box-shadow 0.5s ease;
+}
+
+.profile-card.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Avatar */
+.avatar-wrapper {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.avatar-img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.status-dot {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid var(--dark-bg);
+  background-color: var(--status-offline);
+}
+
+.status-dot.online { background-color: var(--status-online); }
+.status-dot.idle { background-color: var(--status-idle); }
+.status-dot.dnd { background-color: var(--status-dnd); }
+.status-dot.offline { background-color: var(--status-offline); }
+
+/* Identity Section */
+.identity { text-align: center; }
+.display-name { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+.username { font-size: 0.9rem; color: var(--text-muted); margin-top: 2px; }
+
+/* Badges */
+.badges-container {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.badge-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Bio */
+.bio {
+  text-align: center;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  margin-bottom: 25px;
+  max-width: 90%;
+}
+
+/* ==================================================
+   7. MUSIC PLAYER
+   ================================================== */
+.music-player {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.track-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.track-cover {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.music-player.playing .track-cover {
+  transform: scale(1.05);
+}
+
+.track-details { flex: 1; overflow: hidden; }
+.track-title { font-size: 0.95rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.track-artist { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Visualizer */
+.visualizer {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 18px;
+}
+
+.visualizer .bar {
+  width: 3px;
+  height: 4px;
+  background-color: var(--primary);
+  border-radius: 2px;
+  transition: height 0.2s ease;
+}
+
+.music-player.playing .visualizer .bar:nth-child(1) { animation: bounce 0.8s infinite ease-in-out; }
+.music-player.playing .visualizer .bar:nth-child(2) { animation: bounce 0.6s infinite ease-in-out 0.2s; }
+.music-player.playing .visualizer .bar:nth-child(3) { animation: bounce 0.9s infinite ease-in-out 0.4s; }
+.music-player.playing .visualizer .bar:nth-child(4) { animation: bounce 0.7s infinite ease-in-out 0.1s; }
+
+@keyframes bounce {
+  0%, 100% { height: 4px; }
+  50% { height: 18px; }
+}
+
+/* Progress Area */
+.progress-area { display: flex; flex-direction: column; gap: 4px; }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-main);
+  cursor: pointer;
+}
+
+.time-container {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.btn-play {
+  background: var(--text-main);
+  color: var(--dark-bg);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.btn-play:hover { transform: scale(1.08); }
+
+.volume-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.volume-container input[type="range"] { height: 3px; }
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+  .profile-card { padding: 25px 18px 18px 18px; }
+  .avatar-img { width: 95px; height: 95px; }
+}
+
+/* Reduced Motion for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .fog-layer, #rainCanvas { display: none; }
+  .profile-card { transition: none; }
+}

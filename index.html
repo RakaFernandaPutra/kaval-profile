@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Profile</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Font Inter & FontAwesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- LAYER 1: Dark Blurred Ambient & Fog -->
+  <div class="background-blur"></div>
+  <div class="fog-layer fog-1"></div>
+  <div class="fog-layer fog-2"></div>
+
+  <!-- LAYER 2: Canvas High-Performance Rain & Water Droplets -->
+  <canvas id="rainCanvas"></canvas>
+
+  <!-- LAYER 3: Interactive Cursor Glow -->
+  <div class="cursor-glow"></div>
+
+  <!-- Enter Screen (Opsional) -->
+  <div id="enter-screen" class="enter-screen">
+    <div class="enter-content">
+      <i class="fa-solid fa-compact-disc spin-icon"></i>
+      <p>Click to Enter</p>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="main-container">
+    <div class="profile-card">
+      
+      <!-- Profile Header / Avatar -->
+      <div class="avatar-wrapper">
+        <img id="avatar-img" src="" alt="Profile Avatar" class="avatar-img">
+        <span id="status-dot" class="status-dot"></span>
+      </div>
+
+      <!-- Discord Identity -->
+      <div class="identity">
+        <h1 id="display-name" class="display-name"></h1>
+        <p id="username" class="username"></p>
+      </div>
+
+      <!-- Discord Badges -->
+      <div id="badges-container" class="badges-container"></div>
+
+      <!-- Bio -->
+      <p id="bio" class="bio"></p>
+
+      <!-- Music Player -->
+      <div class="music-player">
+        <div class="track-info">
+          <img id="track-cover" src="" alt="Album Cover" class="track-cover">
+          <div class="track-details">
+            <h2 id="track-title" class="track-title"></h2>
+            <p id="track-artist" class="track-artist"></p>
+          </div>
+          
+          <!-- Visualizer Bars -->
+          <div id="visualizer" class="visualizer">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-area">
+          <input type="range" id="progress-bar" value="0" min="0" max="100">
+          <div class="time-container">
+            <span id="current-time">0:00</span>
+            <span id="duration">0:00</span>
+          </div>
+        </div>
+
+        <!-- Player Controls -->
+        <div class="controls">
+          <button id="btn-play" class="btn-play" aria-label="Play/Pause">
+            <i id="play-icon" class="fa-solid fa-play"></i>
+          </button>
+          
+          <div class="volume-container">
+            <i id="volume-icon" class="fa-solid fa-volume-high"></i>
+            <input type="range" id="volume-bar" value="80" min="0" max="100">
+          </div>
+        </div>
+
+        <!-- Hidden Audio Element -->
+        <audio id="audio-player"></audio>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
